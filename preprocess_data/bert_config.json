@@ -1,0 +1,4 @@
+{
+  "model_checkpoint": "distilbert-base-uncased",
+  "max_length": 80
+}
