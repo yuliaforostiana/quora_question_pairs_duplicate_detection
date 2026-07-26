@@ -178,7 +178,6 @@ Full experiment log, including training metrics (to gauge overfitting) alongside
 | Sentence Embeddings Model 2 | `'n_estimators':300, 'learning_rate':0.1, 'max_depth':6` | 0.2221 | 0.9747 | 0.8871 | 0.3488 | 0.9159 | 0.7516 | — | — | — | 2 min 50 s | 0.20 s |
 | **Sentence Embeddings Model 1, Hyperopt-tuned** | `colsample_bytree: 0.801, gamma: 0.885, learning_rate: 0.0747, max_depth: 7, min_child_weight: 1, n_estimators: 350, reg_alpha: 0.153, reg_lambda: 3.433, subsample: 0.860` | 0.1817 | 0.9856 | 0.9168 | **0.3264** | **0.9271** | 0.7741 | — | — | — | 6 min 17 s | **0.33 s** |
 
-> **Note:** this Hyperopt-tuned configuration is the one saved as `models/xgboost_tfidf_se1.joblib` and used in deployment (see `04_xgboost.ipynb`, cell saving `best_model_se1`). The test-set row above (0.2783 / 0.9484 / 0.8330) was logged in `prediction.ipynb` against the "Sentence Embeddings Model 1" row rather than explicitly against the Hyperopt row — since both share the same validation Log Loss (0.3264) and `prediction.ipynb` loads the model directly from `xgboost_tfidf_se1.joblib`, this test result is presumed to reflect the deployed Hyperopt-tuned model. **Worth double-checking against the source spreadsheet/notebook before treating it as final**, since the row labeling doesn't make this fully unambiguous.
 
 #### Transformers (`05_bert.ipynb`, `06_roberta.ipynb`)
 
@@ -207,6 +206,11 @@ The three strongest candidates from validation (tuned Logistic Regression, tuned
 - **XGBoost on sentence embeddings (Hyperopt-tuned) offers the best quality/latency trade-off, and the best Log Loss on both validation and the held-out test set** — this is the model selected for deployment, at ~0.2–0.3s inference and a few minutes of training.
 - **Data quality issues identified in EDA directly informed preprocessing**: dropping rows with missing questions, correcting/handling the 18 mislabeled identical pairs, and grouping by question ID during train/validation splitting to prevent data leakage.
 - Given the mild class imbalance (63/37), no class-balancing techniques were necessary.
+
+## Next Steps & Improvements
+- Combine sentence embeddings with handcrafted overlap features (`jaccard`, `common_ratio`, `len_diff_*`) for XGBoost
+- Re-run RoBERTa with `metric_for_best_model="eval_loss"` to see if it can match XGBoost on Log Loss too
+- Explore stacking/blending the top models (XGBoost + tuned Logistic Regression)
 
 ## Repository Structure
 Due to GitHub storage limitations, large artifacts (preprocessed datasets, trained models, and intermediate files) are hosted externally and can be downloaded from the Google Drive: [preprocess_data](https://drive.google.com/drive/folders/1XK9w-RtTGSauhTp8qMbn-IwxnJiM-W8n?usp=sharing) and [models](https://drive.google.com/drive/folders/1TInDFnlIyZkyrPbknCqht-bJDlTb_Ni3?usp=sharing).
