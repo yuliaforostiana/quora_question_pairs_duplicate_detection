@@ -2,6 +2,13 @@
 
 A Streamlit app that predicts whether two questions are duplicates, powered by an XGBoost model trained on sentence embeddings (cosine + euclidean distance features). The app loads the models directly — no separate backend service required.
 
+
+## [Live Demo](https://quoraquestionpairsduplicatedetection.streamlit.app/)
+
+Interact with the deployed Streamlit application by entering two questions and receiving a real-time duplicate prediction with the corresponding confidence score.
+
+
+
 ## Overview
 
 The app reproduces the inference pipeline from the training notebook:
