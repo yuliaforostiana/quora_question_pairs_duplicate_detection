@@ -107,5 +107,5 @@ Make sure `models/` and `preprocess_data/` contain the required files before bui
 - Add authentication (API key or OAuth)
 - Add rate limiting
 - Add request/response logging and metrics (e.g. Prometheus)
-- [ ] Add `max_length` validation on input text
-- [ ] Consider ONNX export / quantization if latency becomes a bottleneck at scale
+- Add `max_length` validation on input text
+- Consider ONNX export / quantization if latency becomes a bottleneck at scale
