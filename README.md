@@ -2,6 +2,10 @@
 
 Predicting whether two Quora questions are semantically duplicate, using classical ML, gradient boosting, and transformer-based models.
 
+## [Live Demo](https://quoraquestionpairsduplicatedetection.streamlit.app/)
+
+Interact with the deployed Streamlit application by entering two questions and receiving a real-time duplicate prediction with the corresponding confidence score.
+
 ## Table of Contents
 
 1. [Business Task & Goal](#business-task--goal)
@@ -31,7 +35,7 @@ The objective is to build the most accurate model possible for predicting the pr
 - **Columns:** `qid1`, `qid2`, `question1`, `question2`, `is_duplicate`
 - **Size:** full training set, no exact duplicate rows
 
-Key data-quality findings from EDA (see [`00_eda.ipynb`](./00_eda.ipynb) for full analysis):
+Key data-quality findings from EDA (see [`00_eda.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/00_eda.ipynb) for full analysis):
 
 - **Missing values:** 3 rows have a missing question text and need to be dropped.
 - **Mislabeled identical pairs:** 18 pairs have identical `question1`/`question2` text under different `qid`s, of which 5 are (incorrectly) labeled `is_duplicate = 0`. These are treated as a likely labeling error.
@@ -44,7 +48,7 @@ Key data-quality findings from EDA (see [`00_eda.ipynb`](./00_eda.ipynb) for ful
 
 ### Data Cleaning & Splitting
 
-Implemented in [`01_preprocessing.ipynb`](./01_preprocessing.ipynb) / [`preprocessing_utils.py`](./preprocessing_utils.py), directly addressing the issues surfaced in EDA:
+Implemented in [`01_preprocessing.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/01_preprocessing.ipynb) / [`preprocessing_utils.py`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/src/preprocessing_utils.py), directly addressing the issues surfaced in EDA:
 
 1. **Drop rows with missing questions** (`clean_missing`).
 2. **Fix mislabeled identical pairs** — pairs with `question1 == question2` (as text) but `is_duplicate == 0` are relabeled to `1` (`fix_identical_text_mislabels`).
@@ -94,11 +98,11 @@ The primary metric is **Log Loss (Cross-Entropy Loss)** between predicted probab
 - BERT (fine-tuned, multiple checkpoints)
 - RoBERTa (fine-tuned)
 
-**Deployment:** FastAPI (REST API) and Streamlit (interactive UI) — see [`deploy_fastapi/`](./deploy_fastapi) and [`deploy_streamlit/`](./deploy_streamlit).
+**Deployment:** FastAPI (REST API) and Streamlit (interactive UI) — see [`fast_api/`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/tree/main/fast_api) and [`streamlit_app/`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/tree/main/streamlit_app).
 
 ### Modeling Pipeline
 
-Shared evaluation/training helpers live in [`model_utils.py`](./model_utils.py) and are reused across every modeling notebook:
+Shared evaluation/training helpers live in [`model_utils.py`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/src/model_utils.py) and are reused across every modeling notebook:
 - `train_model` — fits a model and times training
 - `classify_analysis` / `classify_analysis_bert` — computes Log Loss, ROC-AUC, F1, inference time, confusion matrix, and classification report for sklearn-style and fine-tuned BERT/RoBERTa models respectively
 - `error_analysis` / `error_analysis_bert` — splits predictions into TP/TN/FP/FN subsets for qualitative inspection
@@ -107,12 +111,12 @@ Modeling notebooks (each loads the feature sets produced by `preprocessing.ipynb
 
 | Notebook | Model(s) | Feature set(s) |
 |---|---|---|
-| [`02_baseline.ipynb`](./02_baseline.ipynb) | Logistic Regression (baseline) | Dataset 1 — TF-IDF, with and without stopwords |
-| [`03_logistic_regression.ipynb`](./03_logistic_regression.ipynb) | Logistic Regression (baseline + `RandomizedSearchCV`-tuned) | Dataset 1 — TF-IDF (with/without stopwords), TF-IDF + SVD (with/without stopwords); Dataset 2 — Sentence embeddings (both models) |
-| [`04_xgboost.ipynb`](./04_xgboost.ipynb) | XGBoost (baseline + Hyperopt-tuned) | Dataset 1 — TF-IDF (with/without stopwords), TF-IDF + SVD (with/without stopwords); Dataset 2 — Sentence embeddings (both models) |
-| [`05_bert.ipynb`](./05_bert.ipynb) | Fine-tuned DistilBERT (`distilbert-base-uncased`) | Dataset 3 — minimally cleaned question pairs, tokenized jointly (question1 + question2) |
-| [`06_roberta.ipynb`](./06_roberta.ipynb) | Fine-tuned RoBERTa (`FacebookAI/roberta-base`) | Dataset 3 — minimally cleaned question pairs, tokenized jointly (question1 + question2) |
-| [`07_prediction.ipynb`](./07_prediction.ipynb) | Final held-out test evaluation of the 3 shortlisted models (Logistic Regression, XGBoost, RoBERTa) | Held-out test set, same feature pipelines as training |
+| [`02_baseline.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/02_baseline.ipynb) | Logistic Regression (baseline) | Dataset 1 — TF-IDF, with and without stopwords |
+| [`03_logistic_regression.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/03_logistic_regression.ipynb) | Logistic Regression (baseline + `RandomizedSearchCV`-tuned) | Dataset 1 — TF-IDF (with/without stopwords), TF-IDF + SVD (with/without stopwords); Dataset 2 — Sentence embeddings (both models) |
+| [`04_xgboost.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/04_xgboost.ipynb) | XGBoost (baseline + Hyperopt-tuned) | Dataset 1 — TF-IDF (with/without stopwords), TF-IDF + SVD (with/without stopwords); Dataset 2 — Sentence embeddings (both models) |
+| [`05_bert.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/05_bert.ipynb) | Fine-tuned DistilBERT (`distilbert-base-uncased`) | Dataset 3 — minimally cleaned question pairs, tokenized jointly (question1 + question2) |
+| [`06_roberta.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/06_roberta.ipynb) | Fine-tuned RoBERTa (`FacebookAI/roberta-base`) | Dataset 3 — minimally cleaned question pairs, tokenized jointly (question1 + question2) |
+| [`07_prediction.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/07_prediction.ipynb) | Final held-out test evaluation of the 3 shortlisted models (Logistic Regression, XGBoost, RoBERTa) | Held-out test set, same feature pipelines as training |
 
 **Baseline findings** (`02_baseline.ipynb`, plain TF-IDF + Logistic Regression, no SVD/tuning):
 - Removing stopwords makes results *worse*, not better — the with-stopwords variant outperforms the without-stopwords one on validation metrics.
@@ -127,7 +131,7 @@ Modeling notebooks (each loads the feature sets produced by `preprocessing.ipynb
 
 **XGBoost findings** (`04_xgboost.ipynb`, baseline `XGBClassifier` per feature set, plus Hyperopt-tuned models — `max_depth`, `learning_rate`, `n_estimators`, `min_child_weight`, `subsample`, `colsample_bytree`, `gamma`, `reg_alpha`/`reg_lambda` — searched via `hyperopt`'s TPE algorithm with `StratifiedKFold` cross-validation):
 - Same feature-quality ordering as Logistic Regression holds: raw TF-IDF < TF-IDF + SVD < sentence embeddings, confirming this is a property of the *features*, not the specific model.
-- **Sentence embeddings + Hyperopt-tuned XGBoost is the best-performing configuration found in the project overall on the primary metric (Log Loss)**, and is the model selected for deployment — saved as `models/xgboost_tfidf_se1.joblib` (see `deploy_fastapi/` and `deploy_streamlit/`).
+- **Sentence embeddings + Hyperopt-tuned XGBoost is the best-performing configuration found in the project overall on the primary metric (Log Loss)**, and is the model selected for deployment — saved as `models/xgboost_tfidf_se1.joblib` (see `fast_api/` and `streamlit_app/`).
 - Unlike Logistic Regression, XGBoost's baseline (untuned) performance on raw/SVD-compressed TF-IDF is noticeably weaker (e.g. val F1 as low as ~0.32–0.44) — tree-based models need either richer features or tuning to make good use of high-dimensional sparse TF-IDF input, whereas linear models handle that representation more natively.
 - Hyperparameter tuning (Hyperopt) gives a modest but consistent improvement over the default `XGBClassifier` settings on sentence embeddings, and is what pushes this configuration slightly ahead of the tuned Logistic Regression on Log Loss/ROC-AUC (though Logistic Regression retains a marginally higher F1).
 
@@ -141,12 +145,12 @@ Modeling notebooks (each loads the feature sets produced by `preprocessing.ipynb
 - Achieves the **best F1 (~0.82) and best ROC-AUC (~0.94) of every model in the project**, confirming that a larger, more capable pretrained encoder still has headroom over DistilBERT and the classical-ML + embeddings approach on ranking/classification quality.
 - Its **Log Loss (~0.50) comes in higher than the tuned XGBoost-on-embeddings model (~0.33)**, which illustrates an important trade-off: selecting the checkpoint that best balances precision/recall (F1) is not the same as selecting the one with the best-calibrated probabilities (Log Loss) — the two metrics reward different things, and a model can lead on one while trailing on the other.
 - Since the project is ultimately evaluated on **Log Loss**, this result reinforces the decision to deploy the model that leads on that specific metric — the tuned XGBoost-on-embeddings configuration — while RoBERTa remains the strongest option if F1/ROC-AUC were the priority instead (e.g. for a use case that cares more about correct classification at a fixed threshold than about probability calibration).
-- Training took ~2h8min and inference ~318s in the timed runs — even more expensive than BERT, reinforcing that a transformer, however strong on quality metrics, is not the right choice for the latency budget of this project's production API.
+- Training took ~2h8min and inference ~318s in the timed runs — even more expensive than BERT, reinforcing that a transformer, however strong on quality metrics, is not the right choice for the latency budget of this project's prediction API.
 - Combined with the BERT results, this closes out the full model comparison in the project (see the [Results](#results) table for the complete picture); **XGBoost on sentence embeddings remains the deployed model**, as the best quality/latency trade-off on the metric that matters most (Log Loss).
 
 ## Results
 
-Full experiment log, including training metrics (to gauge overfitting) alongside validation metrics. Grouped by model family; within each, roughly in the order the experiments were run. Test-set metrics (from [`07_prediction.ipynb`](./07_prediction.ipynb)) are included wherever that experiment was one of the final shortlisted candidates.
+Full experiment log, including training metrics (to gauge overfitting) alongside validation metrics. Grouped by model family; within each, roughly in the order the experiments were run. Test-set metrics (from [`07_prediction.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/07_prediction.ipynb)) are included wherever that experiment was one of the final shortlisted candidates.
 
 #### Logistic Regression (`02_baseline.ipynb`, `03_logistic_regression.ipynb`)
 
@@ -174,7 +178,7 @@ Full experiment log, including training metrics (to gauge overfitting) alongside
 | Sentence Embeddings Model 2 | `'n_estimators':300, 'learning_rate':0.1, 'max_depth':6` | 0.2221 | 0.9747 | 0.8871 | 0.3488 | 0.9159 | 0.7516 | — | — | — | 2 min 50 s | 0.20 s |
 | **Sentence Embeddings Model 1, Hyperopt-tuned** | `colsample_bytree: 0.801, gamma: 0.885, learning_rate: 0.0747, max_depth: 7, min_child_weight: 1, n_estimators: 350, reg_alpha: 0.153, reg_lambda: 3.433, subsample: 0.860` | 0.1817 | 0.9856 | 0.9168 | **0.3264** | **0.9271** | 0.7741 | — | — | — | 6 min 17 s | **0.33 s** |
 
-> **Note:** this Hyperopt-tuned configuration is the one saved as `models/xgboost_tfidf_se1.joblib` and used in deployment (see `04_xgboost.ipynb`, cell saving `best_model_se1`). The test-set row above (0.2783 / 0.9484 / 0.8330) was logged in `production.ipynb` against the "Sentence Embeddings Model 1" row rather than explicitly against the Hyperopt row — since both share the same validation Log Loss (0.3264) and `production.ipynb` loads the model directly from `xgboost_tfidf_se1.joblib`, this test result is presumed to reflect the deployed Hyperopt-tuned model. **Worth double-checking against the source spreadsheet/notebook before treating it as final**, since the row labeling doesn't make this fully unambiguous.
+> **Note:** this Hyperopt-tuned configuration is the one saved as `models/xgboost_tfidf_se1.joblib` and used in deployment (see `04_xgboost.ipynb`, cell saving `best_model_se1`). The test-set row above (0.2783 / 0.9484 / 0.8330) was logged in `prediction.ipynb` against the "Sentence Embeddings Model 1" row rather than explicitly against the Hyperopt row — since both share the same validation Log Loss (0.3264) and `prediction.ipynb` loads the model directly from `xgboost_tfidf_se1.joblib`, this test result is presumed to reflect the deployed Hyperopt-tuned model. **Worth double-checking against the source spreadsheet/notebook before treating it as final**, since the row labeling doesn't make this fully unambiguous.
 
 #### Transformers (`05_bert.ipynb`, `06_roberta.ipynb`)
 
@@ -186,7 +190,7 @@ Full experiment log, including training metrics (to gauge overfitting) alongside
 
 ### Final Model Selection — Held-out Test Set
 
-The three strongest candidates from validation (tuned Logistic Regression, tuned XGBoost, and RoBERTa) were re-evaluated on a fully held-out test set in [`07_prediction.ipynb`](./07_prediction.ipynb), confirming the deployment decision on unseen data rather than validation data alone. Classical models were run on CPU; RoBERTa was run on GPU.
+The three strongest candidates from validation (tuned Logistic Regression, tuned XGBoost, and RoBERTa) were re-evaluated on a fully held-out test set in [`07_prediction.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/07_prediction.ipynb), confirming the deployment decision on unseen data rather than validation data alone. Classical models were run on CPU; RoBERTa was run on GPU.
 
 | Model | Data / Features | Test Log Loss | Test ROC-AUC | Test F1 | Test time | Hardware |
 |---|---|---|---|---|---|---|
@@ -194,37 +198,37 @@ The three strongest candidates from validation (tuned Logistic Regression, tuned
 | **XGBoost** | **Sentence Embeddings (Hyperopt-tuned)** | **0.2783** | 0.9484 | 0.8330 | 0.26 s | CPU |
 | RoBERTa | fine-tuned | 0.3696 | **0.9608** | **0.8678** | 5 min 50 s | GPU |
 
-**This confirms the model selection made on validation data: XGBoost on sentence embeddings has the best Log Loss on the held-out test set as well** — RoBERTa leads on ROC-AUC and F1, consistent with it being selected for F1 during training (see the RoBERTa findings above), but XGBoost remains the strongest choice on the project's primary metric, and by a wider margin than on validation. Notably, RoBERTa's test-time cost (~5m50s, on GPU) confirms that its latency disadvantage isn't a CPU artifact — it would remain far too slow for the production API even with hardware acceleration available.
+**This confirms the model selection made on validation data: XGBoost on sentence embeddings has the best Log Loss on the held-out test set as well** — RoBERTa leads on ROC-AUC and F1, consistent with it being selected for F1 during training (see the RoBERTa findings above), but XGBoost remains the strongest choice on the project's primary metric, and by a wider margin than on validation. Notably, RoBERTa's test-time cost (~5m50s, on GPU) confirms that its latency disadvantage isn't a CPU artifact — it would remain far too slow for the prediction API even with hardware acceleration available.
 
 ## Conclusions
 
 - **Sentence embeddings clearly outperform TF-IDF-based features** for this task — semantic similarity is a much stronger signal for duplicate detection than lexical overlap alone, which matches the EDA finding that word-overlap features (Jaccard, `common_ratio`) correlate with duplication but leave a lot of variance unexplained.
-- **Transformer models (BERT/RoBERTa) achieve the best F1/ROC-AUC**, but at a cost of 150–350 seconds of inference time and hours of training — impractical for a low-latency production API, and this holds true on GPU as well as CPU.
+- **Transformer models (BERT/RoBERTa) achieve the best F1/ROC-AUC**, but at a cost of 150–350 seconds of inference time and hours of training — impractical for a low-latency prediction API, and this holds true on GPU as well as CPU.
 - **XGBoost on sentence embeddings (Hyperopt-tuned) offers the best quality/latency trade-off, and the best Log Loss on both validation and the held-out test set** — this is the model selected for deployment, at ~0.2–0.3s inference and a few minutes of training.
 - **Data quality issues identified in EDA directly informed preprocessing**: dropping rows with missing questions, correcting/handling the 18 mislabeled identical pairs, and grouping by question ID during train/validation splitting to prevent data leakage.
 - Given the mild class imbalance (63/37), no class-balancing techniques were necessary.
 
 ## Repository Structure
-
+Due to GitHub storage limitations, large artifacts (preprocessed datasets, trained models, and intermediate files) are hosted externally and can be downloaded from the Google Drive: [preprocess_data](https://drive.google.com/drive/folders/1XK9w-RtTGSauhTp8qMbn-IwxnJiM-W8n?usp=sharing) and [models](https://drive.google.com/drive/folders/1TInDFnlIyZkyrPbknCqht-bJDlTb_Ni3?usp=sharing).
 ```
 .
 ├── README.md
 │
-├── 00_eda.ipynb                    # Exploratory data analysis
-├── eda_utils.py                 # Text preprocessing, corpus/question stats, overlap features, plots
+├── notebooks/              # Project notebooks (EDA, preprocessing, training, evaluation, inference)
+│   ├── 00_eda.ipynb                    # Exploratory data analysis
+│   ├── 01_preprocessing.ipynb          # Data cleaning, leakage-free train/val split, feature pipelines
+│   ├── 02_baseline.ipynb               # Baseline Logistic Regression (TF-IDF only)
+│   ├── 03_logistic_regression.ipynb    # Logistic Regression across all feature sets, RandomizedSearchCV
+│   ├── 04_xgboost.ipynb                # XGBoost across all feature sets, Hyperopt tuning
+│   ├── 05_bert.ipynb             # Fine-tuned DistilBERT (Google Colab / GPU)
+│   ├── 06_roberta.ipynb          # Fine-tuned RoBERTa (Google Colab / GPU)
+│   └── 07_prediction.ipynb             # Final held-out test evaluation of the 3 shortlisted models  
 │
-├── 01_preprocessing.ipynb          # Data cleaning, leakage-free train/val split, feature pipelines
-├── preprocessing_utils.py       # Cleaning, graph-based split, TF-IDF/SVD, embeddings, BERT prep
-│
-├── 02_baseline.ipynb               # Baseline Logistic Regression (TF-IDF only)
-├── 03_logistic_regression.ipynb    # Logistic Regression across all feature sets, RandomizedSearchCV
-├── 04_xgboost.ipynb                # XGBoost across all feature sets, Hyperopt tuning
-├── 05_bert.ipynb             # Fine-tuned DistilBERT (Google Colab / GPU)
-├── 06_roberta.ipynb          # Fine-tuned RoBERTa (Google Colab / GPU)
-├── model_utils.py               # Shared train/eval/error-analysis helpers for all modeling notebooks
-│
-├── 07_prediction.ipynb             # Final held-out test evaluation of the 3 shortlisted models
-├── inference_utils.py           # Test-set cleaning/feature-building helpers used by production.ipynb
+├── src/              # Reusable Python modules used across the project
+│   ├── eda_utils.py                 # Text preprocessing, corpus/question stats, overlap features, plots
+│   ├── preprocessing_utils.py       # Cleaning, graph-based split, TF-IDF/SVD, embeddings, BERT prep
+│   ├── model_utils.py               # Shared train/eval/error-analysis helpers for all modeling notebooks
+│   └── inference_utils.py           # Test-set cleaning/feature-building helpers used by prediction.ipynb
 │
 ├── preprocess_data/              # Generated artifacts (not committed — see Installation & Usage)
 │   ├── *.parquet                 # Cleaned/feature-engineered train & val splits
@@ -241,7 +245,7 @@ The three strongest candidates from validation (tuned Logistic Regression, tuned
 │   ├── distilbert_baseline/ (+ checkpoints)
 │   └── roberta/
 │
-├── deploy_fastapi/                # FastAPI prediction service
+├── fast_api/                # FastAPI prediction service
 │   ├── app.py
 │   ├── requirements.txt
 │   ├── Dockerfile
@@ -249,7 +253,7 @@ The three strongest candidates from validation (tuned Logistic Regression, tuned
 │   ├── models/                    # xgboost_tfidf_se1.joblib
 │   └── preprocess_data/           # embedding_model_name.txt
 │
-└── deploy_streamlit/               # Streamlit interactive demo
+└── streamlit_app/               # Streamlit interactive demo
     ├── app.py
     ├── requirements.txt
     ├── README.md
@@ -269,17 +273,17 @@ The three strongest candidates from validation (tuned Logistic Regression, tuned
 2. **Add the raw data** — place `quora_question_pairs_train.csv.zip` (and `quora_question_pairs_test.csv.zip` for the final test evaluation) in the repository root.
 
 3. **Run the notebooks in order** (each stage reads the outputs of the previous one from `preprocess_data/` / `models/`):
-   1. `eda.ipynb` — exploratory analysis (optional for reproducing models, but explains the *why* behind preprocessing choices)
-   2. `preprocessing.ipynb` — cleans the data and builds all three feature sets into `preprocess_data/`
-   3. `baseline.ipynb` — baseline Logistic Regression
-   4. `logistic_regression.ipynb` — full Logistic Regression comparison + tuning
-   5. `xgboost.ipynb` — full XGBoost comparison + Hyperopt tuning → saves the deployed model to `models/xgboost_tfidf_se1.joblib`
-   6. `bert_model.ipynb` / `roberta_model.ipynb` — transformer fine-tuning (**requires a GPU** — developed on Google Colab; update the hardcoded Google Drive paths if running elsewhere)
-   7. `production.ipynb` — final evaluation of the shortlisted models on the held-out test set
+   1. `00_eda.ipynb` — exploratory analysis (optional for reproducing models, but explains the *why* behind preprocessing choices)
+   2. `01_preprocessing.ipynb` — cleans the data and builds all three feature sets into `preprocess_data/`
+   3. `02_baseline.ipynb` — baseline Logistic Regression
+   4. `03_logistic_regression.ipynb` — full Logistic Regression comparison + tuning
+   5. `04_xgboost.ipynb` — full XGBoost comparison + Hyperopt tuning → saves the deployed model to `models/xgboost_tfidf_se1.joblib`
+   6. `05_bert.ipynb` / `roberta.ipynb` — transformer fine-tuning (**requires a GPU** — developed on Google Colab; update the hardcoded Google Drive paths if running elsewhere)
+   7. `07_prediction.ipynb` — final evaluation of the shortlisted models on the held-out test set
 
 4. **Deploy the chosen model** — see the dedicated guides:
-   - [`deploy_fastapi/README.md`](./deploy_fastapi/README.md) — run the prediction API locally (`uvicorn`) or via Docker
-   - [`deploy_streamlit/README.md`](./deploy_streamlit/README.md) — run the interactive Streamlit demo
+   - [`fast_api/README.md`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/fast_api/README.md) — run the prediction API locally (`uvicorn`) or via Docker
+   - [`streamlit_app/README.md`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/streamlit_app/README.md) — run the interactive Streamlit demo
 
    Both require `models/xgboost_tfidf_se1.joblib` and `preprocess_data/embedding_model_name.txt`, copied into their respective `models/` / `preprocess_data/` subfolders.
 
@@ -309,6 +313,6 @@ joblib
 ```
 
 Notes:
-- `torch` + `transformers`/`datasets`/`accelerate`/`evaluate` are only needed for `bert_model.ipynb` / `roberta_model.ipynb` / `production.ipynb` — fine-tuning **requires a GPU** in practice (these notebooks were run on Google Colab).
+- `torch` + `transformers`/`datasets`/`accelerate`/`evaluate` are only needed for `bert.ipynb` / `roberta.ipynb` / `prediction.ipynb` — fine-tuning **requires a GPU** in practice (these notebooks were run on Google Colab).
 - `nltk` requires a one-time download of `stopwords`, `averaged_perceptron_tagger_eng`, and `wordnet` (handled at the top of `eda.ipynb` / `preprocessing.ipynb`).
-- The deployment sub-projects (`deploy_fastapi/`, `deploy_streamlit/`) intentionally ship their **own smaller `requirements.txt`** — they only need `fastapi`/`streamlit`, `sentence-transformers`, `xgboost`, and `joblib`, not the full EDA/training stack.
+- The deployment sub-projects (`fast_api/`, `streamlit_app/`) intentionally ship their **own smaller `requirements.txt`** — they only need `fastapi`/`streamlit`, `sentence-transformers`, `xgboost`, and `joblib`, not the full EDA/training stack.
