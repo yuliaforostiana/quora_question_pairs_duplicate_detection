@@ -33,7 +33,7 @@ The objective is to build the most accurate model possible for predicting the pr
 
 - **Source:** Quora Question Pairs dataset (`quora_question_pairs_train.csv.zip`)
 - **Columns:** `qid1`, `qid2`, `question1`, `question2`, `is_duplicate`
-- **Size:** full training set, no exact duplicate rows
+- **Size:** more than 400 thousand rows, no exact duplicate rows
 
 Key data-quality findings from EDA (see [`00_eda.ipynb`](https://github.com/yuliaforostiana/quora_question_pairs_duplicate_detection/blob/main/notebooks/00_eda.ipynb) for full analysis):
 
