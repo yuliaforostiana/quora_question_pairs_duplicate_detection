@@ -52,7 +52,7 @@ prediction + probability
 ## Running the API
 
 ```bash
-uvicorn app_simple:app --host 0.0.0.0 --port 8000
+uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
 Then open **http://127.0.0.1:8000/docs** for the interactive Swagger UI.
