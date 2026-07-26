@@ -26,7 +26,7 @@ prediction + probability
 
 ```
 .
-├── streamlit_app.py        # Streamlit app (loads models directly, no API)
+├── app.py        # Streamlit app
 ├── requirements.txt
 ├── models/
 │   └── xgboost_tfidf_se1.joblib      # not included, see Setup
@@ -53,7 +53,7 @@ prediction + probability
 ## Running the app
 
 ```bash
-streamlit run streamlit_app.py
+streamlit run app.py
 ```
 
 This opens a browser window at `http://localhost:8501` with a form for entering two questions and viewing the prediction.
